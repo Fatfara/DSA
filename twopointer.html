@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Pointer Approach in Algorithms - Interactive Tutorial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        code, pre {
+            font-family: 'Fira Code', monospace;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 text-white p-2 rounded-xl font-bold shadow-md shadow-brand-600/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <span class="font-bold text-lg text-slate-900 tracking-tight">Two-pointer Approach</span>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
+                <a href="#overview" class="hover:text-brand-600 transition">Overview</a>
+                <a href="#technique" class="hover:text-brand-600 transition">Technique</a>
+                <a href="#two-sum" class="hover:text-brand-600 transition">Two Sum</a>
+                <a href="#rotate" class="hover:text-brand-600 transition">Rotate Array</a>
+                <a href="#linkedlist" class="hover:text-brand-600 transition">LinkedList Mid</a>
+            </nav>
+            <span class="text-xs font-semibold px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full border border-brand-200">Baeldung Style Guide</span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <section id="overview" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Section 1</span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">1. Overview</h1>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 text-slate-600 leading-relaxed text-lg">
+                <p>
+                    In this tutorial, we’ll discuss the <strong>two-pointer approach</strong> for solving problems involving arrays and lists. This technique is an easy and efficient way to improve the performance of our algorithm.
+                </p>
+                <div class="p-4 bg-amber-50 border-l-4 border-amber-400 text-amber-900 rounded-r-xl text-sm font-medium">
+                    💡 <strong>Key takeaway:</strong> Transforming nested loop solutions into single-pass operations can dramatically optimize time and space complexity.
+                </div>
+            </div>
+        </section>
+
+        <section id="technique" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Section 2</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">2. Technique Description</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 text-slate-600 leading-relaxed">
+                <p>
+                    In many problems involving arrays or lists, we have to analyze each element of the array compared to its other elements.
+                </p>
+                <p>
+                    To solve problems like these we usually start from the first index and loop through the array one or more times depending on our implementation. Sometimes, we also have to create a temporary array depending on our problem’s requirements.
+                </p>
+                <p class="text-slate-900 font-medium">
+                    The above approach might give us the correct result, but it likely won’t give us the most space- and time-efficient solution. As a result, it is often good to consider whether our problem can be solved efficiently by using the two-pointers approach.
+                </p>
+                <p>
+                    In the two-pointer approach, pointers refer to an array’s indexes. By using pointers, we can process two elements per loop, instead of just one.
+                </p>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                    <h3 class="font-semibold text-slate-900 text-base">Common patterns in the two-pointer approach:</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-brand-600 font-bold">•</span>
+                            <span><strong>Opposite Ends:</strong> Two pointers each starting from the beginning and the end until they both meet in the middle.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-brand-600 font-bold">•</span>
+                            <span><strong>Fast & Slow:</strong> One pointer moves at a slow pace while the other pointer moves at a faster pace.</span>
+                        </li>
+                    </ul>
+                </div>
+                <p>
+                    Both of the above patterns can help us to reduce the time and space complexity of our problems as we get the expected result in fewer iterations and without using too much additional space. Now, let’s take a look at a few examples that will help us to understand this technique a bit better.
+                </p>
+            </div>
+        </section>
+
+        <section id="two-sum" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Section 3</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">3. Sum Exists in an Array</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 text-slate-600 leading-relaxed">
+                <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 text-sm">
+                    <strong class="text-slate-900">Problem:</strong> Given a sorted array of integers, we need to see if there are two numbers in it such that their sum is equal to a specific value. <br>
+                    <em>Example:</em> Input array <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">[1, 1, 2, 3, 4, 6, 8, 9]</code> and target value <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">11</code> should return <code class="text-brand-700 font-bold">true</code>. Target <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">20</code> returns <code class="text-rose-600 font-bold">false</code>.
+                </div>
+
+                <!-- Interactive Demo Widget -->
+                <div class="bg-brand-50/50 p-5 rounded-xl border border-brand-200 space-y-4">
+                    <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wide text-brand-900">Interactive Two Sum Visualizer</h3>
+                    <div class="flex flex-wrap gap-2 items-center justify-center py-4 bg-white rounded-lg border border-brand-100 p-3 shadow-inner" id="twosum-array-container">
+                        <!-- Rendered by JS -->
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-4 text-sm">
+                        <div>Target Value: <span id="twosum-target" class="font-bold text-slate-900">11</span></div>
+                        <div>Status: <span id="twosum-status" class="font-bold text-brand-600">Click step to begin</span></div>
+                        <div class="space-x-2">
+                            <button onclick="stepTwoSum()" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-4 py-2 rounded-lg text-xs shadow transition">Step Pointer</button>
+                            <button onclick="resetTwoSum()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-3 py-2 rounded-lg text-xs transition">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-slate-900 font-semibold">Naive Solution <span class="text-xs font-normal bg-rose-100 text-rose-700 px-2 py-0.5 rounded">O(n²) Time</span></h3>
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-xl text-xs overflow-x-auto shadow-inner">
+                        <pre><code>public boolean twoSumSlow(int[] input, int targetValue) {
+    for (int i = 0; i &lt; input.length; i++) {
+        for (int j = 1; j &lt; input.length; j++) {
+            if (input[i] + input[j] == targetValue) {
+                return true;
+            }
+        }
+    }
+    return false;
+}</code></pre>
+                    </div>
+                    <p class="text-sm">In the above solution, we looped over the input array twice to get all possible combinations. We checked the combination sum against the target value and returned true if it matches. The time complexity of this solution is <strong>O(n²)</strong>.</p>
+                </div>
+
+                <div class="space-y-3 pt-4 border-t border-slate-100">
+                    <h3 class="text-slate-900 font-semibold">Two-Pointer Solution <span class="text-xs font-normal bg-brand-100 text-brand-700 px-2 py-0.5 rounded">O(n) Time | O(1) Space</span></h3>
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-xl text-xs overflow-x-auto shadow-inner">
+                        <pre><code>public boolean twoSum(int[] input, int targetValue) {
+    int pointerOne = 0;
+    int pointerTwo = input.length - 1;
+
+    while (pointerOne &lt; pointerTwo) {
+        int sum = input[pointerOne] + input[pointerTwo];
+
+        if (sum == targetValue) {
+            return true;
+        } else if (sum &lt; targetValue) {
+            pointerOne++;
+        } else {
+            pointerTwo--;
+        }
+    }
+    return false;
+}</code></pre>
+                    </div>
+                    <p class="text-sm">Since the array is already sorted, we can use two pointers. One pointer starts from the beginning of the array, and the other pointer begins from the end of the array, and then we add the values at these pointers. If the sum is less than the target value, we increment the left pointer; if higher, we decrement the right pointer.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="rotate" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Section 4</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">4. Rotate Array k Steps</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 text-slate-600 leading-relaxed">
+                <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 text-sm">
+                    <strong class="text-slate-900">Problem:</strong> Given an array, rotate the array to the right by <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">k</code> steps, where <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">k</code> is non-negative. <br>
+                    <em>Example:</em> Input array <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">[1, 2, 3, 4, 5, 6, 7]</code> and <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">k = 4</code> should output <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold text-brand-700">[4, 5, 6, 7, 1, 2, 3]</code>.
+                </div>
+                <p>
+                    We can solve this by having two loops again which will make the time complexity <strong>O(n²)</strong> or by using an extra temporary array making space complexity <strong>O(n)</strong>. Instead, let's solve this using the two-pointer technique in-place:
+                </p>
+                <div class="bg-slate-900 text-slate-200 p-4 rounded-xl text-xs overflow-x-auto shadow-inner">
+                    <pre><code>public void rotate(int[] input, int step) {
+    step %= input.length;
+    reverse(input, 0, input.length - 1);
+    reverse(input, 0, step - 1);
+    reverse(input, step, input.length - 1);
+}
+
+private void reverse(int[] input, int start, int end) {
+    while (start &lt; end) {
+        int temp = input[start];
+        input[start] = input[end];
+        input[end] = temp;
+        start++;
+        end--;
+    }
+}</code></pre>
+                </div>
+                <p class="text-sm">
+                    We reverse sections of the input array in-place, multiple times, using swapping at both ends. Specifically, we first reverse all elements, then reverse the first <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">k</code> elements followed by the rest. Time complexity is <strong>O(n)</strong> and space complexity is <strong>O(1)</strong>.
+                </p>
+            </div>
+        </section>
+
+        <section id="linkedlist" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Section 5</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">5. Middle Element in a LinkedList</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 text-slate-600 leading-relaxed">
+                <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 text-sm">
+                    <strong class="text-slate-900">Problem:</strong> Given a singly LinkedList, find its middle element. <br>
+                    <em>Example:</em> Input LinkedList <code class="bg-white px-2 py-0.5 rounded border border-slate-300 text-xs font-bold">1 → 2 → 3 → 4 → 5</code> outputs <code class="text-brand-700 font-bold">3</code>.
+                </div>
+                <p>
+                    We can also use the two-pointer technique in other data structures similar to arrays like a LinkedList using the fast and slow pointer pattern:
+                </p>
+                <div class="bg-slate-900 text-slate-200 p-4 rounded-xl text-xs overflow-x-auto shadow-inner">
+                    <pre><code>public &lt;T&gt; T findMiddle(MyNode&lt;T&gt; head) {
+    MyNode&lt;T&gt; slowPointer = head;
+    MyNode&lt;T&gt; fastPointer = head;
+
+    while (fastPointer.next != null &amp;&amp; fastPointer.next.next != null) {
+        fastPointer = fastPointer.next.next;
+        slowPointer = slowPointer.next;
+    }
+    return slowPointer.data;
+}</code></pre>
+                </div>
+                <p class="text-sm">
+                    One pointer increments by one while the other increments by two. When the fast pointer reaches the end, the slow pointer is at the middle. Time complexity is <strong>O(n)</strong> and space complexity is <strong>O(1)</strong>.
+                </p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Section 6</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">6. Conclusion</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 text-slate-600 leading-relaxed">
+                <p>
+                    In this article, we discussed how we can apply the two-pointer technique through practical examples and looked at how it dramatically improves the time and space efficiency of our algorithms.
+                </p>
+                
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-20 py-8 text-center text-sm text-slate-500">
+        <p>&copy; 2026 Algorithmic Tutorials &bull; Adapted from Baeldung Two-Pointer Approach Guide</p>
+    </footer>
+
+    <script>
+        // Interactive Two Sum Simulation Script
+        const twosumArr = [1, 1, 2, 3, 4, 6, 8, 9];
+        const targetValue = 11;
+        let p1 = 0;
+        let p2 = twosumArr.length - 1;
+        let found = false;
+
+        function renderTwoSum() {
+            const container = document.getElementById('twosum-array-container');
+            container.innerHTML = '';
+            twosumArr.forEach((val, idx) => {
+                const box = document.createElement('div');
+                let highlightClass = 'bg-white border-slate-200 text-slate-700';
+                let pointerLabel = '';
+                
+                if (idx === p1 && idx === p2) {
+                    highlightClass = 'bg-brand-600 text-white border-brand-700 shadow-md ring-2 ring-brand-300';
+                    pointerLabel = '<span class="absolute -bottom-6 text-[10px] font-bold text-brand-600 bg-brand-50 px-1 rounded border border-brand-200">P1 & P2</span>';
+                } else if (idx === p1) {
+                    highlightClass = 'bg-blue-600 text-white border-blue-700 shadow-md ring-2 ring-blue-300';
+                    pointerLabel = '<span class="absolute -bottom-6 text-[10px] font-bold text-blue-600 bg-blue-50 px-1 rounded border border-blue-200">P1</span>';
+                } else if (idx === p2) {
+                    highlightClass = 'bg-emerald-600 text-white border-emerald-700 shadow-md ring-2 ring-emerald-300';
+                    pointerLabel = '<span class="absolute -bottom-6 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1 rounded border border-emerald-200">P2</span>';
+                }
+
+                box.className = `relative w-12 h-12 rounded-xl border-2 flex items-center justify-center font-bold text-base transition-all duration-300 ${highlightClass}`;
+                box.innerHTML = `${val}${pointerLabel}`;
+                container.appendChild(box);
+            });
+
+            const sum = twosumArr[p1] + twosumArr[p2];
+            const statusEl = document.getElementById('twosum-status');
+            
+            if (found) {
+                statusEl.innerHTML = `<span class="text-emerald-600 font-bold">Match found! ${twosumArr[p1]} + ${twosumArr[p2]} = ${targetValue} 🎉</span>`;
+            } else if (p1 >= p2) {
+                statusEl.innerHTML = `<span class="text-rose-600 font-bold">Pointers crossed. No pair found.</span>`;
+            } else {
+                statusEl.innerHTML = `Sum = ${twosumArr[p1]} + ${twosumArr[p2]} = <strong>${sum}</strong> (${sum < targetValue ? 'Sum < Target, increment P1' : 'Sum > Target, decrement P2'})`;
+            }
+        }
+
+        function stepTwoSum() {
+            if (found || p1 >= p2) return;
+            const sum = twosumArr[p1] + twosumArr[p2];
+            if (sum === targetValue) {
+                found = true;
+            } else if (sum < targetValue) {
+                p1++;
+            } else {
+                p2--;
+            }
+            if (p1 < p2 && twosumArr[p1] + twosumArr[p2] === targetValue) {
+                found = true;
+            }
+            renderTwoSum();
+        }
+
+        function resetTwoSum() {
+            p1 = 0;
+            p2 = twosumArr.length - 1;
+            found = false;
+            renderTwoSum();
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderTwoSum();
+        };
+    </script>
+</body>
+</html>

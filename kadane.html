@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadane’s Algorithm: Maximum Subarray Sum Tutorial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        code, pre { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl font-bold shadow-md shadow-indigo-600/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <span class="font-bold text-lg text-slate-900 tracking-tight">Kadane’s Algorithm</span>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
+                <a href="#introduction" class="hover:text-indigo-600 transition">Introduction</a>
+                <a href="#bruteforce" class="hover:text-indigo-600 transition">Brute Force</a>
+                <a href="#kadane" class="hover:text-indigo-600 transition">Kadane’s Algorithm</a>
+            </nav>
+            <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">Dynamic Programming</span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <section id="introduction" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Concept</span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">What is Maximum Subarray Sum?</h1>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 text-slate-600 leading-relaxed text-lg">
+                <p>
+                    <strong>Kadane’s Algorithm</strong> is a classic dynamic programming algorithm used to solve the maximum subarray problem. The goal is to find a <em>contiguous subarray</em> (elements right next to each other) within a one-dimensional array of numbers that yields the largest possible sum.
+                </p>
+                <div class="p-4 bg-indigo-50 border-l-4 border-indigo-500 text-indigo-900 rounded-r-xl text-sm font-medium">
+                    💡 <strong>Core Idea:</strong> Instead of checking every single combination, Kadane’s algorithm scans through the array once. It maintains a running sum and resets it if it drops below zero, making it extremely fast with <code class="bg-white px-1.5 py-0.5 rounded border border-indigo-200 font-bold">O(N)</code> time complexity!
+                </div>
+            </div>
+        </section>
+
+        <section id="bruteforce" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Approach 1</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">The Brute Force Approach</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 text-slate-600 leading-relaxed">
+                <p>
+                    A naive way to solve this is to generate all possible subarrays using nested loops, calculate each sum, and keep track of the maximum.
+                </p>
+                <ol class="list-decimal list-inside space-y-2 text-sm bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium text-slate-700">
+                    <li>Initialize <code class="text-indigo-600">globalSum = 0</code> to keep track of the best sum.</li>
+                    <li>Use a loop starting at index <code class="text-indigo-600">i</code> and an inner loop starting at index <code class="text-indigo-600">j</code> to form subarrays.</li>
+                    <li>Sum up the numbers and update <code class="text-indigo-600">globalSum</code> if a higher sum is found.</li>
+                </ol>
+
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Java Implementation</h3>
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-xl text-xs overflow-x-auto shadow-inner">
+                        <pre><code>private static int findMaximumSubArraySumUsingBruteForce(int[] arr) {
+    int globalSum = 0;
+    for (int i = 0; i &lt; arr.length; i++) {
+        int localSum = 0;
+        for (int j = i; j &lt; arr.length; j++) {
+            localSum = localSum + arr[j];
+            globalSum = Math.max(globalSum, localSum);
+        }
+    }
+    return globalSum;
+}</code></pre>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 text-xs font-semibold">
+                    <span class="px-3 py-1 bg-rose-100 text-rose-700 rounded-full">Time: O(N²)</span>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full">Space: O(1)</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="kadane" class="space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Approach 2 (Optimal)</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Kadane’s Algorithm</h2>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 text-slate-600 leading-relaxed">
+                <p>
+                    Instead of nested loops, Kadane's algorithm updates two main variables as it iterates across the array:
+                </p>
+                <ul class="space-y-2 text-sm bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+                    <li class="flex items-start space-x-2">
+                        <span class="text-indigo-600 font-bold">•</span>
+                        <span><strong>sum:</strong> Tracks the current running subarray sum. If <code class="text-indigo-600 font-bold">sum</code> drops below zero, we reset it to <code class="text-indigo-600 font-bold">0</code> because negative numbers only drag down future sums.</span>
+                    </li>
+                    <li class="flex items-start space-x-2">
+                        <span class="text-indigo-600 font-bold">•</span>
+                        <span><strong>maxSum:</strong> Stores the maximum sum encountered so far.</span>
+                    </li>
+                </ul>
+
+                <!-- Interactive Visualizer Widget -->
+                <div class="bg-slate-900 text-white p-5 rounded-xl space-y-4 shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Interactive Kadane Visualizer</span>
+                        <span id="step-counter" class="text-xs bg-indigo-900 text-indigo-200 px-2 py-0.5 rounded font-mono">Step: 0 / 6</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 items-center justify-center py-4 bg-slate-800 rounded-lg border border-slate-700 p-3" id="array-visualizer">
+                        <!-- Rendered by JS -->
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+                        <div>Current Item: <span id="vis-item" class="font-bold text-indigo-300">-</span></div>
+                        <div>Current Sum: <span id="vis-sum" class="font-bold text-emerald-400">0</span></div>
+                        <div class="col-span-2 sm:col-span-1">Max Sum: <span id="vis-max" class="font-bold text-amber-400">0</span></div>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                        <p id="vis-msg" class="text-xs text-slate-300 font-medium">Click "Next Step" to begin simulation.</p>
+                        <div class="space-x-2">
+                            <button onclick="stepKadane()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition shadow">Next Step</button>
+                            <button onclick="resetKadane()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-3 py-2 rounded-lg text-xs transition">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 pt-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Java Code Implementation</h3>
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-xl text-xs overflow-x-auto shadow-inner">
+                        <pre><code>package org.example.Array.Day8;
+
+public class MaximumSubArraySum {
+    public static void main(String[] args) {
+        int[] arr = {10, 20, -40, 60, -50, 60};
+        long max = findMaximumSubArraySumUsingKadaneAlgorithm(arr);
+        System.out.println(max); // Output: 70
+    }
+
+    private static long findMaximumSubArraySumUsingKadaneAlgorithm(int[] arr) {
+        long sum = 0;
+        long maxSum = Long.MIN_VALUE;
+        for (int i = 0; i &lt; arr.length; i++) {
+            sum = sum + arr[i];
+            maxSum = Math.max(sum, maxSum);
+            if (sum &lt; 0) {
+                sum = 0;
+            }
+        }
+        if (maxSum &lt; 0) {
+            maxSum = 0;
+        }
+        return maxSum;
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 text-xs font-semibold">
+                    <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full">Time Complexity: O(N)</span>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full">Space Complexity: O(1)</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-20 py-8 text-center text-sm text-slate-500">
+        <p>&copy; 2026 Algorithmic Tutorials &bull; Kadane's Algorithm Guide</p>
+    </footer>
+
+    <script>
+        const arr = [10, 20, -40, 60, -50, 60];
+        let currentIndex = -1;
+        let currentSum = 0;
+        let maxSoFar = Number.MIN_SAFE_INTEGER;
+        let simulationFinished = false;
+
+        function renderVisualizer() {
+            const container = document.getElementById('array-visualizer');
+            container.innerHTML = '';
+            
+            arr.forEach((val, idx) => {
+                const box = document.createElement('div');
+                let highlight = 'bg-slate-700 border-slate-600 text-slate-300';
+                
+                if (idx === currentIndex) {
+                    highlight = 'bg-indigo-600 border-indigo-400 text-white ring-2 ring-indigo-300 shadow-md scale-105';
+                } else if (idx < currentIndex) {
+                    highlight = 'bg-slate-800 border-slate-700 text-slate-400 opacity-70';
+                }
+
+                box.className = `w-12 h-12 rounded-xl border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 ${highlight}`;
+                box.innerHTML = `${val}`;
+                container.appendChild(box);
+            });
+
+            document.getElementById('step-counter').innerText = `Step: ${currentIndex + 1} / ${arr.length}`;
+            document.getElementById('vis-item').innerText = currentIndex >= 0 && currentIndex < arr.length ? arr[currentIndex] : 'None';
+            document.getElementById('vis-sum').innerText = currentSum;
+            document.getElementById('vis-max').innerText = maxSoFar === Number.MIN_SAFE_INTEGER ? 0 : maxSoFar;
+        }
+
+        function stepKadane() {
+            if (simulationFinished) return;
+
+            if (currentIndex === -1) {
+                currentIndex = 0;
+                currentSum = arr[0];
+                maxSoFar = arr[0];
+                if (currentSum < 0) currentSum = 0;
+            } else {
+                currentIndex++;
+                if (currentIndex < arr.length) {
+                    currentSum += arr[currentIndex];
+                    maxSoFar = Math.max(maxSoFar, currentSum);
+                    if (currentSum < 0) {
+                        currentSum = 0;
+                    }
+                } else {
+                    simulationFinished = true;
+                    if (maxSoFar < 0) maxSoFar = 0;
+                    document.getElementById('vis-msg').innerText = `✨ Finished! Maximum Subarray Sum is ${maxSoFar}`;
+                    renderVisualizer();
+                    return;
+                }
+            }
+
+            document.getElementById('vis-msg').innerText = `Processed index ${currentIndex}. Updated current sum and max sum.`;
+            renderVisualizer();
+        }
+
+        function resetKadane() {
+            currentIndex = -1;
+            currentSum = 0;
+            maxSoFar = Number.MIN_SAFE_INTEGER;
+            simulationFinished = false;
+            document.getElementById('vis-msg').innerText = 'Click "Next Step" to begin simulation.';
+            renderVisualizer();
+        }
+
+        window.onload = function() {
+            resetKadane();
+        };
+    </script>
+</body>
+</html>
